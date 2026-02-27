@@ -65,6 +65,11 @@ import io.agentscope.core.tool.ToolExecutionContext;
 import io.agentscope.core.tool.ToolResultMessageBuilder;
 import io.agentscope.core.tool.Toolkit;
 import io.agentscope.core.util.MessageUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -74,10 +79,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 /**
  * ReAct (Reasoning and Acting) Agent implementation.
@@ -648,7 +649,10 @@ public class ReActAgent extends StructuredOutputCapableAgent {
                                                                     postEvent -> {
                                                                         Msg finalMsg =
                                                                                 postEvent
-                                                                                        .getSummaryMessage();
+                                                                                        .getSummaryMessage()
+                                                                                        .withGenerateReason(
+                                                                                                GenerateReason
+                                                                                                        .MAX_ITERATIONS);
                                                                         memory.addMessage(finalMsg);
                                                                         return finalMsg;
                                                                     }));
